@@ -1,52 +1,55 @@
--- Purple Hub V-PRO | Rivals Edition
+-- Purple Hub V-PRO | PRO EDITION
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 
--- Arayüzü Oluştur
+-- Ses Efekti Fonksiyonu (Her etkileşimde tık sesi)
+local function PlayClickSound()
+    local sound = Instance.new("Sound", game.SoundService)
+    sound.SoundId = "rbxassetid://12221967" -- Klasik temiz tıklama sesi
+    sound.Volume = 0.5
+    sound:Play()
+    game.Debris:AddItem(sound, 1)
+end
+
+-- Arayüzü Oluştur (Tablet dostu ayarlar)
 local Window = Fluent:CreateWindow({
-    Title = "Purple Hub V-PRO | Rivals",
+    Title = "Purple Hub V-PRO",
     SubTitle = "by Purpleguy",
     TabWidth = 160,
-    Size = UDim2.fromOffset(580, 460),
-    Acrylic = true, -- Modern blur efekti
+    Size = UDim2.fromOffset(500, 380), -- Tabletlerde rahat görünür boyutta
+    Acrylic = true, 
     Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl
+    MinimizeKey = Enum.KeyCode.RightControl -- Bilgisayarda gizlemek için
 })
 
--- Sekmeler
 local Tabs = {
     Combat = Window:AddTab({ Title = "Combat", Icon = "sword" }),
     Visuals = Window:AddTab({ Title = "Visuals", Icon = "eye" }),
     Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
 }
 
--- [COMBAT] Modülü
-Tabs.Combat:AddToggle("AutoAim", {Title = "Auto-Aim", Description = "Rivals için hassas hedefleme", Default = false, Callback = function(Value)
-    print("Auto-Aim açıldı: " .. tostring(Value))
-    -- Buraya kendi Auto-Aim fonksiyonunu bağlayabilirsin
+-- [COMBAT] - Örnek Kullanım
+Tabs.Combat:AddToggle("AutoAim", {Title = "Auto-Aim", Description = "Kilitlenmeyi aç", Default = false, Callback = function(v)
+    PlayClickSound()
+    print("Auto-Aim:", v)
 end})
 
-Tabs.Combat:AddToggle("NoRecoil", {Title = "No-Recoil", Description = "Silah sekmesini kapatır", Default = false, Callback = function(Value)
-    print("No-Recoil açıldı: " .. tostring(Value))
+-- [VISUALS] - Örnek Kullanım
+Tabs.Visuals:AddToggle("ESP", {Title = "Player ESP", Description = "Düşmanları gör", Default = false, Callback = function(v)
+    PlayClickSound()
+    print("ESP:", v)
 end})
 
--- [VISUALS] Modülü
-Tabs.Visuals:AddToggle("ESP", {Title = "Player ESP", Description = "Düşmanları duvar arkasından görme", Default = false, Callback = function(Value)
-    print("ESP açıldı: " .. tostring(Value))
-end})
-
--- [SETTINGS] Modülü
-Tabs.Settings:AddButton({
-    Title = "Discord Sunucumuza Katıl",
-    Description = "Güncellemeler için tıkla",
-    Callback = function()
-        print("Discord linki açılıyor...")
-    end
-})
-
--- Hoş geldin Bildirimi
+-- [SETTINGS] - Ses ve Bilgilendirme
 Fluent:Notify({
     Title = "Purple Hub",
-    Content = "Rivals Edition başarıyla yüklendi, Purpleguy!",
-    Duration = 5
+    Content = "Sistem hazır, Purpleguy!",
+    Duration = 3
 })
+
+-- SaveManager ile ayarları kaydetmeyi aktif et
+local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
+SaveManager:SetLibrary(Fluent)
+SaveManager:IgnoreThemeSettings()
+SaveManager:SetIgnoreIndexes({})
+SaveManager:BuildConfig()
+SaveManager:LoadAutoloadConfig()
